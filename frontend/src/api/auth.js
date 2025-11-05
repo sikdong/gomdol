@@ -1,0 +1,12 @@
+import apiClient from './client';
+
+export const login = async (credentials) => {
+  const { data } = await apiClient.post('/auth/login', credentials);
+  return data;
+};
+
+export const logout = () => apiClient.post('/auth/logout');
+
+export const oauthLogin = (provider) => {
+  window.location.href = `/api/auth/oauth/${provider}`;
+};
