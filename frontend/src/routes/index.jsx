@@ -9,6 +9,7 @@ import OrdersPage from '../pages/OrdersPage';
 import AdminDashboardPage from '../pages/AdminDashboardPage';
 import ProductEditorPage from '../pages/ProductEditorPage';
 import LoginPage from '../pages/LoginPage';
+import OauthCallbackPage from '../pages/oauth/OauthCallbackPage';
 
 const AppRoutes = () => (
   <Routes>
@@ -18,6 +19,7 @@ const AppRoutes = () => (
       <Route path="/cart" element={<CartPage />} />
       <Route path="/orders" element={<OrdersPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/oauth/:provider/callback" element={<OauthCallbackPage />} />
     </Route>
     <Route path="/admin" element={<AdminLayout />}>
       <Route index element={<AdminDashboardPage />} />

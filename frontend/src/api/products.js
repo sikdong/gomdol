@@ -2,7 +2,13 @@ import apiClient from './client';
 
 export const fetchProducts = async () => {
   const { data } = await apiClient.get('/products');
-  return data;
+  if (Array.isArray(data)) {
+    return data;
+  }
+  if (data && Array.isArray(data.content)) {
+    return data.content;
+  }
+  return [];
 };
 
 export const fetchProductById = async (id) => {

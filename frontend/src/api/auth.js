@@ -6,7 +6,3 @@ export const login = async (credentials) => {
 };
 
 export const logout = () => apiClient.post('/auth/logout');
-
-export const oauthLogin = (provider) => {
-  window.location.href = `/api/auth/oauth/${provider}`;
-};

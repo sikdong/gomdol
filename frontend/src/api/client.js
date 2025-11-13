@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCookie } from '../utils/cookies';
 
 const apiClient = axios.create({
   baseURL: '/api',
@@ -6,7 +7,7 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = window.localStorage.getItem('gomdol_jwt');
+  const token = getCookie('gomdol_access_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

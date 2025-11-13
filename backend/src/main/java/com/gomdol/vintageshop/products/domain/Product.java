@@ -44,6 +44,9 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private Integer price;
 
+    @Column(name = "view_count", columnDefinition = "bigint default 0")
+    private Long viewCount;
+
     @Basic(fetch = FetchType.LAZY)
     private String description;
 
