@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { logout } from '../api/auth';
+import { AUTH_USER_UPDATED_EVENT } from '../constants/auth';
 import useAuthUser from '../hooks/useAuthUser';
 
 const Container = styled.header`
@@ -26,9 +28,27 @@ const UserBadge = styled.span`
   font-weight: 600;
 `;
 
+const LogoutButton = styled.button`
+  border: none;
+  background: transparent;
+  color: #111827;
+  cursor: pointer;
+  font-weight: 600;
+`;
+
 const Header = () => {
   const authUser = useAuthUser();
-  console.log("authUser === " , authUser);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent(AUTH_USER_UPDATED_EVENT));
+      }
+    } catch (error) {
+      console.error('Failed to logout', error);
+    }
+  };
 
   return (
     <Container>
@@ -37,7 +57,10 @@ const Header = () => {
         <Link to="/cart">Cart</Link>
         <Link to="/orders">Orders</Link>
         {authUser ? (
-          <UserBadge>{authUser.nickname}님</UserBadge>
+          <>
+            <UserBadge>{authUser.nickname}님</UserBadge>
+            <LogoutButton type="button" onClick={handleLogout}>Logout</LogoutButton>
+          </>
         ) : (
           <Link to="/login">Login</Link>
         )}

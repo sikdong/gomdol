@@ -7,13 +7,19 @@ import com.gomdol.vintageshop.members.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.Duration;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,9 +28,11 @@ public class AuthController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
+    private static final String ACCESS_COOKIE_NAME = "gomdol_access_token";
+    private static final String REFRESH_COOKIE_NAME = "gomdol_refresh_token";
 
     @GetMapping("/me")
-    public AuthUserResponse me(@CookieValue(value = "gomdol_access_token", required = false) String accessToken) {
+    public AuthUserResponse me(@CookieValue(value = ACCESS_COOKIE_NAME, required = false) String accessToken) {
         if (!StringUtils.hasText(accessToken)) {
             throw unauthorized("Access token is missing");
         }
@@ -52,6 +60,19 @@ public class AuthController {
         );
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        ResponseCookie expiredAccess = buildExpiredCookie(ACCESS_COOKIE_NAME);
+        ResponseCookie expiredRefresh = buildExpiredCookie(REFRESH_COOKIE_NAME);
+
+        return ResponseEntity.noContent()
+                .headers(headers -> {
+                    headers.add(HttpHeaders.SET_COOKIE, expiredAccess.toString());
+                    headers.add(HttpHeaders.SET_COOKIE, expiredRefresh.toString());
+                })
+                .build();
+    }
+
     private ResponseStatusException unauthorized(String message) {
         return new ResponseStatusException(HttpStatus.UNAUTHORIZED, message);
     }
@@ -62,5 +83,15 @@ public class AuthController {
         } catch (NumberFormatException ex) {
             throw unauthorized("Invalid member id in token");
         }
+    }
+
+    private ResponseCookie buildExpiredCookie(String name) {
+        return ResponseCookie.from(name, "")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(Duration.ZERO)
+                .build();
     }
 }
