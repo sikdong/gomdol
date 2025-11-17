@@ -1,19 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import apiClient from '../api/client';
-
-const Grid = styled.section`
-  display: grid;
-  gap: 24px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-`;
-
-const Card = styled.article`
-  background: #fff;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
-`;
 
 const AdminDashboardPage = () => {
   const [stats, setStats] = useState(null);
@@ -42,29 +28,29 @@ const AdminDashboardPage = () => {
   }
 
   return (
-    <section>
-      <h1>Admin Dashboard</h1>
-      <Grid>
-        <Card>
-          <h3>Daily Visitors</h3>
-          <p>{stats.dailyVisitors}</p>
-        </Card>
-        <Card>
-          <h3>Daily Sales</h3>
-          <p>{stats.dailySalesCount}</p>
-        </Card>
-        <Card>
-          <h3>Top Products</h3>
-          <ul>
+    <section className="space-y-8">
+      <h1 className="text-3xl font-semibold text-slate-900">Admin Dashboard</h1>
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <article className="rounded-3xl bg-white p-6 shadow-xl">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Daily Visitors</h3>
+          <p className="mt-3 text-3xl font-bold text-slate-900">{stats.dailyVisitors}</p>
+        </article>
+        <article className="rounded-3xl bg-white p-6 shadow-xl">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Daily Sales</h3>
+          <p className="mt-3 text-3xl font-bold text-slate-900">{stats.dailySalesCount}</p>
+        </article>
+        <article className="rounded-3xl bg-white p-6 shadow-xl md:col-span-2 xl:col-span-1">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Top Products</h3>
+          <ul className="mt-4 space-y-2 text-slate-700">
             {stats.topProducts.map((product) => (
-              <li key={product.productId}>
+              <li key={product.productId} className="rounded-lg bg-slate-50 px-3 py-2">
                 {product.name} - {product.totalSold} sold
               </li>
             ))}
           </ul>
-          {!stats.topProducts.length && <p>No sales yet.</p>}
-        </Card>
-      </Grid>
+          {!stats.topProducts.length && <p className="mt-3 text-slate-500">No sales yet.</p>}
+        </article>
+      </div>
     </section>
   );
 };

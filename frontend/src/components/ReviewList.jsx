@@ -1,35 +1,27 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Container = styled.section`
-  margin-top: 32px;
-`;
-
-const ReviewItem = styled.article`
-  padding: 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  margin-bottom: 16px;
-  background: #fff;
-`;
-
-const Rating = styled.div`
-  font-weight: 700;
-  color: #fbbf24;
-`;
 
 const ReviewList = ({ reviews = [] }) => (
-  <Container>
-    <h3>Reviews ({reviews.length})</h3>
+  <section className="mt-12 space-y-4">
+    <div className="flex items-center justify-between">
+      <h3 className="text-xl font-semibold text-slate-900">Community reviews</h3>
+      <span className="text-sm text-slate-500">{reviews.length} entries</span>
+    </div>
     {reviews.map((review) => (
-      <ReviewItem key={review.id}>
-        <Rating>{'★'.repeat(review.rating)}</Rating>
-        <p>{review.content}</p>
-        <small>by {review.username}</small>
-      </ReviewItem>
+      <article key={review.id} className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
+        <div className="flex items-center justify-between">
+          <div className="text-lg font-bold text-amber-400">{'★'.repeat(review.rating)}</div>
+          <span className="text-xs uppercase tracking-wide text-slate-400">Verified buyer</span>
+        </div>
+        <p className="mt-3 text-slate-700">{review.content}</p>
+        <small className="mt-3 block text-xs text-slate-500">— {review.username}</small>
+      </article>
     ))}
-    {!reviews.length && <p>No reviews yet. Be the first!</p>}
-  </Container>
+    {!reviews.length && (
+      <p className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500">
+        No reviews yet. Be the first to share your thoughts.
+      </p>
+    )}
+  </section>
 );
 
 export default ReviewList;

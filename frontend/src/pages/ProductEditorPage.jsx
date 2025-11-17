@@ -1,33 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { createProduct, fetchProductById, updateProduct, deleteProduct } from '../api/products';
-
-const Form = styled.form`
-  display: grid;
-  gap: 16px;
-  max-width: 540px;
-`;
-
-const Field = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const ButtonRow = styled.div`
-  display: flex;
-  gap: 12px;
-`;
-
-const Button = styled.button`
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  background: ${(props) => props.$variant === 'danger' ? '#dc2626' : '#2563eb'};
-  color: #fff;
-  cursor: pointer;
-`;
 
 const ProductEditorPage = ({ mode }) => {
   const navigate = useNavigate();
@@ -85,32 +58,77 @@ const ProductEditorPage = ({ mode }) => {
   return (
     <section>
       <h1>{mode === 'edit' ? 'Edit Product' : 'Create Product'}</h1>
-      <Form onSubmit={handleSubmit}>
-        <Field>
-          <label htmlFor="name">Name</label>
-          <input id="name" name="name" value={form.name} onChange={handleChange} required />
-        </Field>
-        <Field>
-          <label htmlFor="category">Category</label>
-          <input id="category" name="category" value={form.category} onChange={handleChange} required />
-        </Field>
-        <Field>
-          <label htmlFor="price">Price</label>
-          <input id="price" name="price" type="number" value={form.price} onChange={handleChange} required />
-        </Field>
-        <Field>
-          <label htmlFor="imageUrl">Image URL</label>
-          <input id="imageUrl" name="imageUrl" value={form.imageUrl} onChange={handleChange} />
-        </Field>
-        <Field>
-          <label htmlFor="description">Description</label>
-          <textarea id="description" name="description" rows="4" value={form.description} onChange={handleChange} />
-        </Field>
-        <ButtonRow>
-          <Button type="submit">Save</Button>
-          {mode === 'edit' && <Button type="button" $variant="danger" onClick={handleDelete}>Delete</Button>}
-        </ButtonRow>
-      </Form>
+      <form className="grid max-w-2xl gap-4" onSubmit={handleSubmit}>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="name" className="text-sm font-medium text-slate-600">Name</label>
+          <input
+            id="name"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            required
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="category" className="text-sm font-medium text-slate-600">Category</label>
+          <input
+            id="category"
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            required
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="price" className="text-sm font-medium text-slate-600">Price</label>
+          <input
+            id="price"
+            name="price"
+            type="number"
+            value={form.price}
+            onChange={handleChange}
+            required
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="imageUrl" className="text-sm font-medium text-slate-600">Image URL</label>
+          <input
+            id="imageUrl"
+            name="imageUrl"
+            value={form.imageUrl}
+            onChange={handleChange}
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="description" className="text-sm font-medium text-slate-600">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            value={form.description}
+            onChange={handleChange}
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          />
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <button type="submit" className="rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700">
+            Save
+          </button>
+          {mode === 'edit' && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="rounded-xl bg-rose-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700"
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      </form>
     </section>
   );
 };

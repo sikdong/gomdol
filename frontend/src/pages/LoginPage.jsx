@@ -1,61 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { login } from '../api/auth';
 import OAUTH_PROVIDERS, { buildAuthorizeUrl, createOauthState, isProviderConfigured } from '../config/oauthProviders';
-
-const Container = styled.section`
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 24px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
-`;
-
-const Button = styled.button`
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: ${(props) => {
-    if (props.$variant === 'google') {
-      return '1px solid #d1d5db';
-    }
-    return 'none';
-  }};
-  font-weight: 600;
-  margin-bottom: 12px;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: ${(props) => {
-    if (props.$variant === 'google') return '#fff';
-    if (props.$variant === 'kakao') return '#FEE500';
-    if (props.$variant === 'secondary') return '#0ea5e9';
-    return '#2563eb';
-  }};
-  color: ${(props) => {
-    if (props.$variant === 'google') return '#1f2937';
-    if (props.$variant === 'kakao') return '#3C1E1E';
-    return '#fff';
-  }};
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-`;
-
-const ButtonContent = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const IconWrapper = styled.span`
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 const GoogleLogo = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" role="img" aria-hidden="true">
@@ -111,9 +56,9 @@ const LoginPage = () => {
   const kakaoReady = isProviderConfigured('kakao');
 
   return (
-    <Container>
-      <h2>Sign in</h2>
-      <form onSubmit={handleSubmit}>
+    <section className="mx-auto mt-10 max-w-md rounded-3xl bg-white p-8 shadow-2xl">
+      <h2 className="text-2xl font-semibold text-slate-900">Sign in</h2>
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
         <input
           type="text"
           name="username"
@@ -121,6 +66,7 @@ const LoginPage = () => {
           value={form.username}
           onChange={handleChange}
           required
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
         <input
           type="password"
@@ -129,27 +75,41 @@ const LoginPage = () => {
           value={form.password}
           onChange={handleChange}
           required
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
-        <Button type="submit">Login</Button>
+        <button
+          type="submit"
+          className="w-full rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-indigo-700"
+        >
+          Login
+        </button>
       </form>
-      <Button type="button" $variant="google" disabled={!googleReady} onClick={() => handleOauthClick('google')}>
-        <ButtonContent>
-          <IconWrapper>
+      <div className="mt-6 space-y-3">
+        <button
+          type="button"
+          disabled={!googleReady}
+          onClick={() => handleOauthClick('google')}
+          className="flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <span className="inline-flex h-5 w-5 items-center justify-center">
             <GoogleLogo />
-          </IconWrapper>
-          <span>구글 로그인 하기</span>
-        </ButtonContent>
-      </Button>
-      <Button type="button" $variant="kakao" disabled={!kakaoReady} onClick={() => handleOauthClick('kakao')}>
-        <ButtonContent>
-          <IconWrapper>
+          </span>
+          구글 로그인 하기
+        </button>
+        <button
+          type="button"
+          disabled={!kakaoReady}
+          onClick={() => handleOauthClick('kakao')}
+          className="flex w-full items-center justify-center gap-3 rounded-2xl bg-yellow-300 px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-yellow-200 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <span className="inline-flex h-5 w-5 items-center justify-center">
             <KakaoLogo />
-          </IconWrapper>
-          <span>카카오 로그인 하기</span>
-        </ButtonContent>
-      </Button>
-      {error && <p style={{ color: '#dc2626' }}>{error}</p>}
-    </Container>
+          </span>
+          카카오 로그인 하기
+        </button>
+      </div>
+      {error && <p className="mt-4 text-sm text-rose-600">{error}</p>}
+    </section>
   );
 };
 

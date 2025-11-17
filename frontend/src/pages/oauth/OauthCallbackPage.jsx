@@ -1,37 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { exchangeOauthCode } from '../../api/oauth';
 import OAUTH_PROVIDERS, { consumeOauthState } from '../../config/oauthProviders';
 import { AUTH_USER_UPDATED_EVENT } from '../../constants/auth';
-
-const Wrapper = styled.section`
-  max-width: 420px;
-  margin: 80px auto;
-  padding: 32px;
-  text-align: center;
-`;
-
-const Status = styled.p`
-  margin-top: 16px;
-  color: ${(props) => props.$error ? '#dc2626' : '#0f172a'};
-`;
-
-const Spinner = styled.div`
-  margin: 24px auto;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 4px solid #e0e7ff;
-  border-top-color: #2563eb;
-  animation: spin 1s linear infinite;
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-`;
 
 const OauthCallbackPage = () => {
   const { provider } = useParams();
@@ -84,17 +55,21 @@ const OauthCallbackPage = () => {
   }, [provider, location.search, navigate]);
 
   return (
-    <Wrapper>
-      <Spinner />
-      <Status $error={Boolean(error)}>
+    <section className="mx-auto mt-20 max-w-lg rounded-3xl bg-white px-8 py-12 text-center shadow-2xl">
+      <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-indigo-100 border-t-indigo-600" />
+      <p className={`mt-6 text-base ${error ? 'text-rose-600' : 'text-slate-900'}`}>
         {error || `${OAUTH_PROVIDERS[provider]?.name || '소셜'} 로그인 처리 중입니다...`}
-      </Status>
+      </p>
       {error && (
-        <button type="button" onClick={() => navigate('/login')}>
+        <button
+          type="button"
+          onClick={() => navigate('/login')}
+          className="mt-6 rounded-2xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow transition hover:bg-indigo-700"
+        >
           로그인 화면으로 이동
         </button>
       )}
-    </Wrapper>
+    </section>
   );
 };
 
